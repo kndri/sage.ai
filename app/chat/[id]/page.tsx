@@ -1,7 +1,7 @@
 'use client';
 
+import { useParams } from 'next/navigation';
 import { Fragment } from 'react'
-import Link from 'next/link'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -27,14 +27,82 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const books = Array.from({ length: 14 }, (_, i) => ({
-  id: i,
-  title: `Book ${i + 1}`,
-  url: '#',
-  coverImage: 'https://via.placeholder.com/150',
-}));
+const Ask = () => {
+  return (
+    <div className='flex'>
+    <div className="flex w-full overflow-hidden">
+      <div className="bg-white text-gray-800 float-right rounded-md w-full block overflow-hidden border-b border-gray-300 leading-6 px-4 py-1">
+        <div className="flex flex-row mt-1">
+          <div className="w-8 h-8 mr-2">K</div>
+          <div className="w-full overflow-hidden">
+            <div>
+              <p><span className="cursor-auto">How much money will I have in cash value by the age of 50?</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  );
+};
 
-export default function Home() {
+const Response = () => {
+  return (
+    <div className="flex w-full overflow-hidden">
+      <div className="bg-gray-100 text-gray-800 float-left rounded-md w-full block overflow-hidden border-b border-gray-300 leading-6 px-4 py-1">
+        <div className="flex flex-row mt-1">
+          <div className="w-8 h-8 mr-2">
+            <img src="/logo.png" alt="Humata AI" className="rounded-full"/>
+          </div>
+          <div className="w-full overflow-hidden">
+            <div className="flex flex-shrink-1 float-right text-lg items-center">
+              {/* SVG icons go here */}
+            </div>
+            <div>
+              <p><span className="cursor-auto">Apologies for the confusion. According to the provided supplemental illustration, at age 50, the cash value is projected to be $267,207 [5].</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AskInput = () => {
+  return (
+    <div className="flex m-5 relative">
+      <div className="flex-grow mr-2 border border-gray-300 rounded-lg bg-white">
+        <textarea 
+          rows="1" 
+          placeholder="Ask ..." 
+          className="h-5 overflow-auto flex-grow font-light m-2 resize-none border-0 outline-none pt-1 pb-0"
+        />
+        <textarea 
+          aria-hidden="true" 
+          readOnly 
+          tabIndex="-1" 
+          className="invisible absolute overflow-auto h-0 top-0 left-0 transform flex-grow font-light m-2 resize-none border-0 outline-none pt-0 pb-0 w-96"
+        />
+      </div>
+      <div className="flex justify-center items-center">
+        <button 
+          className="bg-blue-500 text-white rounded p-2" 
+          tabIndex="0" 
+          type="button" 
+          aria-label="Send Message"
+        >
+          {/* SVG icon goes here */}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default function Chat() {
+  const params = useParams();
+  console.log("params: ", params);
+  const chatId = params?.id;
+
   return (
     <>
       <div className="min-h-full">
@@ -64,7 +132,11 @@ export default function Home() {
                         <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                           <span className="absolute -inset-1.5" />
                           <span className="sr-only">Open user menu</span>
-                          <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src={user.imageUrl}
+                            alt=""
+                          />
                         </Menu.Button>
                       </div>
                       <Transition
@@ -83,8 +155,8 @@ export default function Home() {
                                 <a
                                   href={item.href}
                                   className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
                                   )}
                                 >
                                   {item.name}
@@ -102,9 +174,15 @@ export default function Home() {
                       <span className="absolute -inset-0.5" />
                       <span className="sr-only">Open main menu</span>
                       {open ? (
-                        <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                        <XMarkIcon
+                          className="block h-6 w-6"
+                          aria-hidden="true"
+                        />
                       ) : (
-                        <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                        <Bars3Icon
+                          className="block h-6 w-6"
+                          aria-hidden="true"
+                        />
                       )}
                     </Disclosure.Button>
                   </div>
@@ -120,11 +198,11 @@ export default function Home() {
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                          : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
-                        'block border-l-4 py-2 pl-3 pr-4 text-base font-medium'
+                          ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                          : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
+                        "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
                       )}
-                      aria-current={item.current ? 'page' : undefined}
+                      aria-current={item.current ? "page" : undefined}
                     >
                       {item.name}
                     </Disclosure.Button>
@@ -133,11 +211,19 @@ export default function Home() {
                 <div className="border-t border-gray-200 pb-3 pt-4">
                   <div className="flex items-center px-4">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src={user.imageUrl}
+                        alt=""
+                      />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium text-gray-800">{user.name}</div>
-                      <div className="text-sm font-medium text-gray-500">{user.email}</div>
+                      <div className="text-base font-medium text-gray-800">
+                        {user.name}
+                      </div>
+                      <div className="text-sm font-medium text-gray-500">
+                        {user.email}
+                      </div>
                     </div>
                     <button
                       type="button"
@@ -166,28 +252,42 @@ export default function Home() {
           )}
         </Disclosure>
 
-        <div className="py-10">
-          <header>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">My Books</h1>
-            </div>
-          </header>
-          <main>
-            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {books.map((book) => (
-                   <Link key={book.id} href={`/chat/${book.id}`}>
-                    <div className="w-40 h-60 m-2">
-                      <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-                    </div>
-                  </Link>
-                ))}
+        <div className="flex flex-row flex-grow w-screen h-full bg-white overflow-scroll">
+          {/* Left pane */}
+          <div className="w-[50vw]">
+            <div className="flex flex-grow flex-col h-full overflow-hidden bg-[#F9FAFB] border-t border-[#D0D5DD]">
+              <div className="flex bg-white m-2 w-11/12 items-center p-1 border border-gray-300">
+                <div>
+                  <button className="p-1" aria-label="Conversation History">
+                    {/* SVG icon goes here */}
+                  </button>
+                </div>
+                <div className="flex-grow flex justify-center">Ask Humata</div>
+                <button className="p-1" aria-label="New Conversation">
+                  {/* SVG icon goes here */}
+                </button>
+              </div>
+
+              {/* Conversations Container */}
+              <div className="flex flex-col flex-grow overflow-scroll">
+
+                {/* messages container */}
+                <div className="flex flex-grow flex-col overflow-scroll">
+                  // Place Ask Component Here
+                </div>
+                {/* end of messages container */}
+
+                {/* askInput component */}
+                <AskInput />
+                {/* end of askInput component */}
               </div>
             </div>
-          </main>
+          </div>
+
+          {/* Right pane */}
+          <div className="w-[50vw]"></div>
         </div>
       </div>
     </>
-  )
+  );
 }
-
