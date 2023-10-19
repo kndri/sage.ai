@@ -11,14 +11,21 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@pinecone-database/pinecone": "^1.1.0",
+    "@types/pdf-parse": "^1.1.2",
+    "ai": "^2.2.14",
     "next": "13.5.4",
+    "openai-edge": "^1.2.2",
+    "pdf-parse": "^1.1.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.5",
     "autoprefixer": "^10",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",

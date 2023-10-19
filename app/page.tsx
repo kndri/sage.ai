@@ -1,7 +1,8 @@
 'use client';
 
-import { Fragment } from 'react'
-import Link from 'next/link'
+import { Fragment, useState } from 'react'
+import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -27,14 +28,52 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const books = Array.from({ length: 14 }, (_, i) => ({
-  id: i,
-  title: `Book ${i + 1}`,
-  url: '#',
-  coverImage: 'https://via.placeholder.com/150',
-}));
+type Book = {
+  id: string;
+  title: string;
+  author: string;
+  url: string;
+  coverImageUrl: string;
+}
+
+const books = [
+  {
+    id: '1',
+    title: 'Zero to One',
+    author: 'Peter Thiel',
+    url: 'https://pdfdrive.com.co/wp-content/pdfh/Zero-to-One-Notes-on-Startups-or-How-to-Build-the-Future.pdf',
+    coverImageUrl: 'https://d3fa68hw0m2vcc.cloudfront.net/2bb/149175833.jpeg'
+  },
+  {
+    id: '2',
+    title: 'Atomic Habits',
+    author: 'James Clear',
+    url: 'https://pdfdrive.com.co/wp-content/pdfh/Atomic-Habits-PDF-Download.pdf',
+    coverImageUrl: 'https://m.media-amazon.com/images/I/81bGKUa1e0L._AC_UF1000,1000_QL80_.jpg'
+  },
+  {
+    id: '3',
+    title: 'The Psychology of Money',
+    author: 'Morgan Housel',
+    url: 'https://pdfdrive.com.co/wp-content/pdfh/The%20Psychology%20of%20Money.pdf',
+    coverImageUrl: 'https://m.media-amazon.com/images/I/81zlbsnFiYL._AC_UF1000,1000_QL80_.jpg'
+  },
+]
+
+const createUniqueChatId = () => {
+  return uuidv4();
+};
+
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleBookClick = (bookId) => {
+    const uniqueChatId = createUniqueChatId();
+    // Save the uniqueChatId and bookId to your database here
+    router.push(`/chat/${uniqueChatId}`);
+  };
+
   return (
     <>
       <div className="min-h-full">
@@ -175,15 +214,13 @@ export default function Home() {
           <main>
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {books.map((book) => (
-                   <Link key={book.id} href={`/chat/${book.id}`}>
-                    <div className="w-40 h-60 m-2">
-                      <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-                    </div>
-                  </Link>
+              {books.map((book) => (
+                  <div key={book.id} onClick={() => handleBookClick(book.id)} className="w-40 h-60 m-2 cursor-pointer">
+                    <img src={book.coverImageUrl} alt={book.title} className="w-full h-full object-cover" />
+                  </div>
                 ))}
               </div>
-            </div>
+              </div>
           </main>
         </div>
       </div>

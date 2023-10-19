@@ -1,7 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { Fragment } from 'react'
+import { Fragment, useRef } from 'react'
+import { Message } from "ai";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -11,12 +12,14 @@ const user = {
   imageUrl:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
+
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Team', href: '#', current: false },
   { name: 'Projects', href: '#', current: false },
   { name: 'Calendar', href: '#', current: false },
 ]
+
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
@@ -27,7 +30,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const Ask = () => {
+const Ask = (content: string) => {
   return (
     <div className='flex'>
     <div className="flex w-full overflow-hidden">
@@ -36,7 +39,7 @@ const Ask = () => {
           <div className="w-8 h-8 mr-2">K</div>
           <div className="w-full overflow-hidden">
             <div>
-              <p><span className="cursor-auto">How much money will I have in cash value by the age of 50?</span></p>
+              <p><span className="cursor-auto">{content}</span></p>
             </div>
           </div>
         </div>
@@ -46,7 +49,7 @@ const Ask = () => {
   );
 };
 
-const Response = () => {
+const Response = (content: string) => {
   return (
     <div className="flex w-full overflow-hidden">
       <div className="bg-gray-100 text-gray-800 float-left rounded-md w-full block overflow-hidden border-b border-gray-300 leading-6 px-4 py-1">
@@ -59,7 +62,7 @@ const Response = () => {
               {/* SVG icons go here */}
             </div>
             <div>
-              <p><span className="cursor-auto">Apologies for the confusion. According to the provided supplemental illustration, at age 50, the cash value is projected to be $267,207 [5].</span></p>
+              <p><span className="cursor-auto">(content)</span></p>
             </div>
           </div>
         </div>
@@ -98,10 +101,11 @@ const AskInput = () => {
   );
 };
 
-export default function Chat() {
+export default function Chat({ messages }: { messages: Message[] }) {
   const params = useParams();
-  console.log("params: ", params);
   const chatId = params?.id;
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
 
   return (
     <>
@@ -270,11 +274,23 @@ export default function Chat() {
 
               {/* Conversations Container */}
               <div className="flex flex-col flex-grow overflow-scroll">
-
                 {/* messages container */}
+                {messages?.length > 0 ? (
                 <div className="flex flex-grow flex-col overflow-scroll">
-                  // Place Ask Component Here
+                  
+                  {messages.map((msg, index) => {
+                    if (msg.role === "assistant") {
+                      return <Response key={index} content={msg.content} />;
+                    } else {
+                      return <Ask key={index} content={msg.content} />;
+                    }
+                  })}
+                  <div ref={messagesEndRef} />
                 </div>
+                ) : (
+                  <div className="flex flex-grow flex-col overflow-scroll">
+                    </div>
+                )}
                 {/* end of messages container */}
 
                 {/* askInput component */}
